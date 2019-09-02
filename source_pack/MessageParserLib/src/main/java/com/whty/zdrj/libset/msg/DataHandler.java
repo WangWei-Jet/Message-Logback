@@ -664,15 +664,17 @@ public class DataHandler implements IDataHandler {
 					String tagID = tempEle.getId();
 					if (tagID != null) {
 						int id = Integer.valueOf(tagID);
-						if (id == 23) {
-							// 卡片序列号，数据右靠BCD码
-							if (len % 2 > 0) {
-								if (sb.length() < len + 1) {
-									showLog("请求数据长度有误(短)，长度:" + sb.length());
-									result.setResultCode("20");
-									return result;
-								}
+						// 卡片序列号，数据右靠BCD码
+						if (len % 2 > 0) {
+							if (sb.length() < len + 1) {
+								showLog("请求数据长度有误(短)，长度:" + sb.length());
+								result.setResultCode("20");
+								return result;
+							}
+							if (id == 23) {
 								targetValue = sb.substring(1, len + 1);
+							} else {
+								targetValue = sb.substring(0, len);
 							}
 						}
 					}
