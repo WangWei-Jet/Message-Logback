@@ -1,0 +1,1 @@
+mvn deploy:deploy-file -Dmaven.test.skip=true -Dfile=C:\Users\wangwei01\Desktop\MessageParserLib\pack\MessageParserLib_final_2018-05-11_13.10.19.jar -DgroupId=com.whty.zdrj -DartifactId=MessageParseLib -Dversion=2.0.4-SNAPSHOT -Dpackaging=jar -DrepositoryId=nexus -Durl=http://10.8.50.249/nexus/repository/maven-snapshots/

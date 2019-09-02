@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MessageParserLib" default="combine">
+    <property environment="SystemVariable" />
+    <property name="sys.ant.home" value="${SystemVariable.ANT_HOME}" /> 
+	<property name="jdk.dir" value="${SystemVariable.JDK_HOME}" />
+	<property name="mvn.dir" value="${SystemVariable.MVN_HOME}" />
+	<property name="sdk.dir" value="${SystemVariable.ANDROID_HOME}" />
+    
+	<property name="compileJarName" value="MessageParserLib.jar" />
+	<property name="combineJarName" value="MessageParserLib_final" />
+    
+	<property name="outDir" value="../out" />
+	<property name="srcDir" value="../src/" />
+	
+	<property name="proguardHome" value="${sdk.dir}/tools/proguard/lib" />
+
+	<path id="refLib">
+		<fileset dir="${mvn.dir}/repository/net/sf/json-lib/json-lib/2.4/">
+			<include name="json-lib-2.4-jdk15.jar" />
+		</fileset>
+	</path>
+	
+	<target name="init">
+	    <echo level="info">prepare dir....</echo>
+		<delete dir="${outDir}" />
+		<mkdir dir="${outDir}" />
+		 <tstamp prefix="build.">
+		   <format property="TimeSign" pattern="yyyy-MM-dd_HH.mm.ss"/>
+		  </tstamp>
+	</target>
+	
+	<target name="compile" depends="init">
+	    <echo level="info">compile.....</echo>
+		<javac fork="true" target="1.7" srcdir="${srcDir}/main/java" destdir="${outDir}" encoding="utf-8" >
+			<compilerarg line="-encoding UTF-8 "/> 
+			<classpath refid="refLib" />
+		</javac>
+	</target>
+	
+	<target name="copy_res" depends="compile">
+	    <echo level="info">copy_res.....</echo>
+		<copy todir="${outDir}/template">
+			<fileset dir="${srcDir}/main/java/template/"/>
+		</copy>
+		
+	</target>
+	
+	<target name="jar" depends="copy_res">
+	    <echo level="info">package.....</echo>
+		<jar jarfile="${compileJarName}">
+			<fileset dir="${outDir}" includes="**/*.*" />
+		</jar>
+	</target>
+
+		
+	<target name="combine" depends="jar">
+	    <echo level="info">combine.....</echo>
+		<jar destfile="${combineJarName}_${build.TimeSign}.jar">
+			<zipfileset src="${compileJarName}" />
+			<manifest>
+                <attribute name="Main-Class" value="com.whty.zdrj.libset.msg.MsgTest"/>
+            </manifest>
+		</jar>
+		<echo level="info">clean.....</echo>
+		<delete dir="${outDir}"/>
+		<delete file="${compileJarName}"/>
+	</target>
+</project>
